@@ -61,8 +61,11 @@ export default new class {
     }
 
     // FIXME: need a library to convert it in correct way with no dependencies
-    byteToString(str: string) {
-        return str.slice(130, 130 + 76).replace(/00+/, '');
+    byteToString(str: string, truncate: boolean = false) {
+        let output = str.slice(130, 130 + 76);
+        if (truncate) output = output.replace(/00+/, '');
+
+        return output;
     }
 
     decodeContentHash(string: string) {

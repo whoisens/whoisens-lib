@@ -41,7 +41,7 @@ export default class ReverseResolver {
         return {
             contractAddress: this.contractAddress,
             contractMethod: method,
-            result: utils.hexToAscii(utils.byteToString(result.result)),
+            result: utils.hexToAscii(utils.byteToString(result.result, true)),
             data: {
                 reverseAddress: this.reverseAddress
             }
