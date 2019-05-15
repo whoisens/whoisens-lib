@@ -1,2 +1,1 @@
 - add jsdocs
-- fix TS errors

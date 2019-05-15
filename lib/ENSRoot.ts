@@ -3,6 +3,8 @@ import config from './../config.json';
 import utils from '../utils/index.js';
 import jsonRCP from '../utils/json-rcp.js';
 
+import {Response} from './ENS.js';
+
 export default class ENSRoot {
     public currentNetwork: string;
 
@@ -10,7 +12,7 @@ export default class ENSRoot {
         this.currentNetwork = networkName;
     }
 
-    public async getOwner(ethName) {
+    public async getOwner(ethName): Promise<Response> {
         const contractAddress = config.deployments[this.currentNetwork];
         const contractMethod = 'owner(bytes32)';
 
@@ -32,7 +34,7 @@ export default class ENSRoot {
         }
     }
 
-    public async getResolver(ethName) {
+    public async getResolver(ethName): Promise<Response> {
         const contractAddress = config.deployments[this.currentNetwork];
         const contractMethod = 'resolver(bytes32)';
 

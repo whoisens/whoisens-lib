@@ -3,6 +3,7 @@ import utils from '../utils/index.js';
 import jsonRCP from '../utils/json-rcp.js';
 
 import ENSRoot from './ENSRoot.js';
+import {Response} from './ENS';
 
 export default class Resolver {
     private readonly currentNetwork: string;
@@ -22,11 +23,11 @@ export default class Resolver {
         this.ethNameNode = utils.node(this.ethName);
     }
 
-    public async init() {
+    public async init(): Promise<void> {
         await this.getContractAddress();
     }
 
-    public async getAddress() {
+    public async getAddress(): Promise<Response> {
         const method = 'addr(bytes32)';
         const methodId = utils.getMethodID(method);
 
@@ -45,7 +46,7 @@ export default class Resolver {
         }
     }
 
-    public async getContentHash() {
+    public async getContentHash(): Promise<Response> {
         const method = 'contenthash(bytes32)';
         const methodId = utils.getMethodID(method);
 
@@ -66,7 +67,7 @@ export default class Resolver {
         }
     }
 
-    private async getContractAddress() {
+    private async getContractAddress(): Promise<void> {
         const ensRoot = new ENSRoot(this.currentNetwork);
         this.contractAddress = (await ensRoot.getResolver(this.ethName)).result;
     }

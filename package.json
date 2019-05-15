@@ -1,6 +1,6 @@
 {
   "name": "whoisens-lib",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
   "author": "Alex Ivasyuv",
   "homepage": "https://github.com/whoisens/whoisens-lib",
@@ -24,14 +24,18 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "npx tsc",
-    "build:watch": "npx tsc -w"
+    "build:watch": "npx tsc -w",
+    "docs": "npx typedoc --out docs",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@types/node": "^12.0.2",
     "content-hash": "^2.3.2",
     "eth-ens-namehash": "^2.0.8",
     "js-sha3": "^0.8.0"
   },
   "devDependencies": {
+    "typedoc": "^0.14.2",
     "typescript": "^3.4.5"
   }
 }

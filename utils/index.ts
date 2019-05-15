@@ -9,11 +9,11 @@ const CONTENT_HASH_CODEC_MAP = {
 };
 
 export default new class {
-    getMethodID(methodSignature): string {
+    public getMethodID(methodSignature): string {
         return `0x${this.hash(methodSignature).slice(0, 8)}`;
     }
 
-    trimHex(hex: string): string {
+    public trimHex(hex: string): string {
         if (!hex) return;
         return hex.replace(/0x0+/g, '');
     }
@@ -23,52 +23,52 @@ export default new class {
      *
      * @param hex
      */
-    normalizeHex(hex: string): string {
+    public normalizeHex(hex: string): string {
         if (!hex) return;
         if (hex === '0x') return hex;
         return this.add0x(this.trimHex(hex));
     }
 
-    add0x(hex: string): string {
+    public add0x(hex: string): string {
         return '0x' + hex;
     }
 
-    remove0x(hex: string): string {
+    public remove0x(hex: string): string {
         if (!hex || !hex.startsWith('0x')) return;
         return hex.slice(2);
     }
 
-    node(string: string): string {
+    public node(string: string): string {
         return namehash.hash(string);
     }
 
-    hash(string: string): string {
+    public hash(string: string): string {
         return jsSHA3.keccak256(string);
     }
 
-    getLTDfromDomain(domain: string): string {
+    public getLTDfromDomain(domain: string): string {
         return domain.split('.').pop();
     }
 
-    getLabelsFromDomain(domain: string): string[] {
+    public getLabelsFromDomain(domain: string): string[] {
         return domain.split('.').slice(0, -1);
     }
 
-    getNameType(address: string): EthNameType {
+    public getNameType(address: string): EthNameType {
         if (address.endsWith('.eth')) return EthNameType.name;
         if (address.startsWith('0x') || address.endsWith('.addr.reverse')) return EthNameType.address;
         return EthNameType.error;
     }
 
     // FIXME: need a library to convert it in correct way with no dependencies
-    byteToString(str: string, truncate: boolean = false) {
+    public byteToString(str: string, truncate: boolean = false): string {
         let output = str.slice(130, 130 + 76);
         if (truncate) output = output.replace(/00+/, '');
 
         return output;
     }
 
-    decodeContentHash(string: string) {
+    public decodeContentHash(string: string): object | undefined {
         if (!string) return;
 
         //HACK: !
@@ -81,20 +81,20 @@ export default new class {
         }
     }
 
-    getContentHashAsURL(contentHash) {
+    public getContentHashAsURL(contentHash): string | undefined {
         if (!contentHash) return;
 
         const codec = this.getContentHashCodec(contentHash.codec);
         return `${codec}${contentHash.content}`;
     }
 
-    getContentHashCodec(codec) {
+    public getContentHashCodec(codec): string | undefined {
         return CONTENT_HASH_CODEC_MAP[codec];
     }
 
     //https://github.com/ethereum/web3.js/blob/1.0/packages/web3-utils/src/index.js#L117
     //FIXME: doesn't work as should be. Also need a library to correct convertion
-    hexToAscii(hex) {
+    public hexToAscii(hex): string | undefined {
         if (!hex) return;
 
         let value = '';
@@ -113,7 +113,7 @@ export default new class {
         return value;
     };
 
-    reverseAddressToHex(address: string) {
+    public reverseAddressToHex(address: string): string {
         return '0x' + address.replace('.addr.reverse', '');
     }
 }

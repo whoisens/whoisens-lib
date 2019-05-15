@@ -3,6 +3,7 @@ import utils from '../utils/index.js';
 import jsonRCP from '../utils/json-rcp.js';
 
 import ENSRoot from './ENSRoot.js';
+import {Response} from './ENS.js';
 
 export default class ReverseResolver {
     static REVERSE_DOMAIN = 'addr.reverse';
@@ -22,11 +23,11 @@ export default class ReverseResolver {
         this.reverseAddressNode = utils.node(this.reverseAddress);
     }
 
-    public async init() {
+    public async init(): Promise<void> {
         await this.getContractAddress();
     }
 
-    public async getName() {
+    public async getName(): Promise<Response> {
         const method = 'name(bytes32)';
         const methodId = utils.getMethodID(method);
 
@@ -48,12 +49,12 @@ export default class ReverseResolver {
         }
     }
 
-    private async getContractAddress() {
+    private async getContractAddress(): Promise<void> {
         const ensRoot = new ENSRoot(this.currentNetwork);
         this.contractAddress = (await ensRoot.getResolver(this.reverseAddress)).result;
     }
 
-    private getReverseAddress(address: string) {
+    private getReverseAddress(address: string): string {
         return `${address}.${ReverseResolver.REVERSE_DOMAIN}`
     }
 }

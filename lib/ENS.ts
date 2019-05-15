@@ -27,23 +27,10 @@ export interface SetResponseError {
 export interface Response {
     contractAddress: string,
     contractMethod: string,
-    result: object,
-    error?: object
+    result: string,
+    data?: object,
+    error?: string
 }
-
-/**
- * Ethereum name
- *
- * @event ENS#ethName
- * @type {string} Ethereum name
- */
-
-/**
- * Ethereum name type
- *
- * @event ENS#ethNameType
- * @type {string} Ethereum name type
- */
 
 export default class ENS extends EventEmitter {
     public currentNetwork: string;
@@ -57,6 +44,21 @@ export default class ENS extends EventEmitter {
     public ethNameType: EthNameType | undefined;
     public resolveAddress: string | undefined;
 
+    /**
+     * @event
+     */
+    static EVENT_ETH_NAME = 'ethName';
+
+    /**
+     * @event
+     */
+    static EVENT_ETH_NAME_TYPE = 'ethNameType';
+
+    /**
+     * @event
+     */
+    static EVENT_SET_RESPONSE = 'setResponse';
+
     constructor(networkName: string = config.defaultNetworkName) {
         super();
         this.currentNetwork = networkName;
@@ -67,18 +69,18 @@ export default class ENS extends EventEmitter {
     /**
      * Init with eth name.
      *
-     * @fires ENS#ethName
-     * @fires ENS#ethNameType
-     * @param ethName
+     * @fires ENS.EVENT_ETH_NAME
+     * @fires ENS.EVENT_ETH_NAME_TYPE
      */
-    public init(ethName: string) {
+    public init(ethName: string): void {
         this.ethName = ethName;
-        this.emit('ethName', this.ethName);
+
+        this.emit(ENS.EVENT_ETH_NAME, this.ethName);
 
         this.ethNameType = utils.getNameType(this.ethName);
         if (this.ethName.endsWith('.addr.reverse')) this.ethName = utils.reverseAddressToHex(this.ethName);
 
-        this.emit('ethNameType', this.ethNameType);
+        this.emit(ENS.EVENT_ETH_NAME_TYPE, this.ethNameType);
     }
 
     public async getInfo() {
@@ -121,7 +123,7 @@ export default class ENS extends EventEmitter {
     /**
      * Get Eth Name owner.
      *
-     * @fires ENS#setResponse
+     * @fires ENS.EVENT_SET_RESPONSE
      * @type {object}
      * @property resultName {string} nameOwnerResult
      *
@@ -142,7 +144,7 @@ export default class ENS extends EventEmitter {
     /**
      * Get Registrar owner.
      *
-     * @fires ENS#setResponse
+     * @fires ENS.EVENT_SET_RESPONSE
      * @type {object}
      * @property resultName {string} registrarOwnerResult
      *
@@ -165,7 +167,7 @@ export default class ENS extends EventEmitter {
     /**
      * Get Registrar expired.
      *
-     * @fires ENS#setResponse
+     * @fires ENS.EVENT_SET_RESPONSE
      * @type {object}
      * @property resultName {string} registrarExpired
      *
@@ -190,7 +192,7 @@ export default class ENS extends EventEmitter {
     /**
      * Get Forward Resolver address
      *
-     * @fires ENS#setResponse
+     * @fires ENS.EVENT_SET_RESPONSE
      * @type {object}
      * @property resultName {string} resolverAddress
      *
@@ -213,7 +215,7 @@ export default class ENS extends EventEmitter {
     /**
      * Get Content hash
      *
-     * @fires ENS#setResponse
+     * @fires ENS.EVENT_SET_RESPONSE
      * @type {object}
      * @property resultName {string} resolverContentHash
      *
@@ -238,7 +240,7 @@ export default class ENS extends EventEmitter {
     /**
      * Get Reve hash
      *
-     * @fires ENS#setResponse
+     * @fires ENS.EVENT_SET_RESPONSE
      * @type {object}
      * @property resultName {string} revertResolverResult
      *
@@ -260,7 +262,7 @@ export default class ENS extends EventEmitter {
     }
 
     private sendResponse(resultName: string, result: object) {
-        this.emit('setResponse', {
+        this.emit(ENS.EVENT_SET_RESPONSE, {
             resultName,
             result
         });
