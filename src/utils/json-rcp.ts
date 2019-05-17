@@ -1,5 +1,5 @@
 import config from '../config.json';
-
+import {IJSONRCPResponseResult, IJSONRCPResponse} from '../lib/types.js';
 
 export default {
     /**
@@ -9,25 +9,29 @@ export default {
      * @link https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_call
      * @param networkName
      */
-    async call({networkName = config.defaultNetworkName as string, to, data}) {
+    async makeRequest({networkName = config.defaultNetworkName as string, to, data}): Promise<IJSONRCPResponseResult> {
         const url = `https://${networkName}.infura.io/v3/${config.infuraClientID}`;
 
+        const id = new Date().valueOf();
         const request = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                'jsonrpc': '2.0',
-                'id': new Date().valueOf(),
-                'method': 'eth_call',
-                'params': [{
+                jsonrpc: '2.0',
+                id,
+                method: 'eth_call',
+                params: [{
                     to,
                     data
                 }, 'latest']
             })
         });
 
-        return await request.json();
+        return {
+            id,
+            data: <IJSONRCPResponse>(await request.json())
+        };
     }
 }

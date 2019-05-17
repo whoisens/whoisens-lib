@@ -44,22 +44,22 @@ import fetch from 'node-fetch';
 global.fetch = fetch;
 
 
-// get name owner
+// get name owner (registrar)
 const ens = new ENS();
 await ens.init('whoisens.eth');
-const result = await ens.getNameOwner();
-
-// get registral owner (controller)
-const result = await ens.getRegistrarOwner();
+const result = await ens.getOwner();
 
 // get name expiration date
-const result = await ens.getRegistrarExpired();
+const result = await ens.getExpirationDate();
+
+// get controller
+const result = await ens.getController();
 
 // resolve name or address
-const resultAddress = await ens.getResolverAddress();
+const result = await ens.resolve();
 
 // get content hash
-const resultContent = await ens.getContentHash();
+const result = await ens.getContentHash();
 ```
 
 

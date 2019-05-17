@@ -3,9 +3,10 @@ import utils from '../utils/index.js';
 import jsonRCP from '../utils/json-rcp.js';
 
 import ENSRoot from './ENSRoot.js';
-import {Response} from './ENS.js';
+import {Responder} from './Responder.js';
+import {IResponseResponseInfo, ResolveType} from './types.js';
 
-export default class ReverseResolver {
+export default class ReverseResolver extends Responder {
     static REVERSE_DOMAIN = 'addr.reverse';
 
     private readonly currentNetwork: string;
@@ -16,6 +17,8 @@ export default class ReverseResolver {
     private readonly reverseAddressNode: string;
 
     constructor(networkName: string = config.defaultNetworkName, address: string) {
+        super();
+
         this.currentNetwork = networkName;
 
         this.address = address;
@@ -24,34 +27,42 @@ export default class ReverseResolver {
     }
 
     public async init(): Promise<void> {
-        await this.getContractAddress();
+        this.contractAddress = await this.getContractAddress();
     }
 
-    public async getName(): Promise<Response> {
+    public async getName(): Promise<IResponseResponseInfo> {
         const method = 'name(bytes32)';
         const methodId = utils.getMethodID(method);
 
-        const data = [methodId, utils.remove0x(this.reverseAddressNode)].join('');
+        const reverseAddressNode = utils.remove0x(this.reverseAddressNode);
+        const data = [methodId, reverseAddressNode].join('');
 
-        const result = await jsonRCP.call({
+        const result = await jsonRCP.makeRequest({
             networkName: this.currentNetwork,
             to: this.contractAddress,
             data
         });
 
-        return {
+        return this.returnResult({
             contractAddress: this.contractAddress,
             contractMethod: method,
-            result: utils.hexToAscii(utils.byteToString(result.result, true)),
+            payload: data,
+            parameters: {
+                methodId,
+                reverseAddressNode
+            },
+            jsonRCPResult: result,
+            result: utils.hexToAscii(utils.byteToString(result.data.result, true)),
             data: {
+                resolveType: ResolveType.reverse,
                 reverseAddress: this.reverseAddress
             }
-        }
+        });
     }
 
-    private async getContractAddress(): Promise<void> {
+    private async getContractAddress(): Promise<string> {
         const ensRoot = new ENSRoot(this.currentNetwork);
-        this.contractAddress = (await ensRoot.getResolver(this.reverseAddress)).result;
+        return <string>(await ensRoot.getResolver(this.reverseAddress)).result;
     }
 
     private getReverseAddress(address: string): string {

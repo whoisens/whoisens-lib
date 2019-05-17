@@ -1,3 +1,17 @@
+## [1.0.0-beta.1] - 2019-05-17
+
+API is changed.
+
+### Changed
+- lot of code refactoring. API is changed.
+
+### Added
+- integration tests #1
+- added support for subdomains #3
+- new info in result object for JSON RCP, including contract address, method, payload, parameters, etc...
+- support for ems and cjs
+- documentation
+
 ## [0.0.7] - 2019-05-15
 
 ### Changed

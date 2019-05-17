@@ -3,9 +3,9 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "target": "esnext",
-    "module": "esnext",
-    "outDir": "dist",
+    "target": "es2018",
+    "module": "es2015",
+    "outDir": "dist/esm",
     "declaration": true,
     "sourceMap": true,
     "lib": [
@@ -14,5 +14,8 @@
       "dom.iterable",
       "scripthost"
     ]
-  }
+  },
+  "include": [
+    "src/**/*"
+  ]
 }
