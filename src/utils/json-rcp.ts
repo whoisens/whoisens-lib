@@ -1,4 +1,3 @@
-import config from '../config.json';
 import {IJSONRCPResponseResult, IJSONRCPResponse} from '../lib/types.js';
 
 export default {
@@ -7,11 +6,8 @@ export default {
      * @link https://infura.io/docs/ethereum/json-rpc/eth_call
      * @link https://solidity.readthedocs.io/en/latest/abi-spec.html#examples
      * @link https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_call
-     * @param networkName
      */
-    async makeRequest({networkName = config.defaultNetworkName as string, to, data}): Promise<IJSONRCPResponseResult> {
-        const url = `https://${networkName}.infura.io/v3/${config.infuraClientID}`;
-
+    async makeRequest({url, to, data}): Promise<IJSONRCPResponseResult> {
         const id = new Date().valueOf();
         const request = await fetch(url, {
             method: 'POST',

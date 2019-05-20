@@ -12,12 +12,15 @@ const EXPIRES = NAME_WHOISENS_ETH.expires;
 
 const suite = new Suite('ENS');
 
+const networkName = 'mainnet';
+const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517e3ce6321`;
+
 (async () => {
   for (const ethName of NAME_WHOISENS_ETH.eth_names) {
     const name = ethName.name;
 
     suite.test(`get Eth Name owner for: ${name}`, async (t) => {
-      const ens = new ENS();
+      const ens = new ENS(networkName, networkURL);
       await ens.init(name);
       const result = await ens.getOwner();
 
@@ -29,7 +32,7 @@ const suite = new Suite('ENS');
     });
 
     suite.test(`get Eth Name expiration date for: ${name}`, async (t) => {
-      const ens = new ENS();
+      const ens = new ENS(networkName, networkURL);
       await ens.init(name);
       const result = await ens.getExpirationDate();
 
@@ -38,7 +41,7 @@ const suite = new Suite('ENS');
 
 
     suite.test(`get Controller for: ${name}`, async (t) => {
-      const ens = new ENS();
+      const ens = new ENS(networkName, networkURL);
       await ens.init(name);
       const result = await ens.getController();
 
@@ -47,7 +50,7 @@ const suite = new Suite('ENS');
 
 
     suite.test(`get Resolve address for: ${name}`, async (t) => {
-      const ens = new ENS();
+      const ens = new ENS(networkName, networkURL);
       await ens.init(name);
       const result = await ens.resolve();
 
@@ -64,7 +67,7 @@ const suite = new Suite('ENS');
 
     if (resolvedAddress && reverseResolvedAddress) {
       suite.test(`get Reverse address for: ${resolvedAddress}`, async (t) => {
-        const ens = new ENS();
+        const ens = new ENS(networkName, networkURL);
         await ens.init(resolvedAddress);
         const result = await ens.resolve();
 
@@ -80,7 +83,7 @@ const suite = new Suite('ENS');
 
       const resolvedAddress2 = resolvedAddress.slice(2) + '.addr.reverse';
       suite.test(`get Reverse address for: ${resolvedAddress2}`, async (t) => {
-        const ens = new ENS();
+        const ens = new ENS(networkName, networkURL);
         await ens.init(resolvedAddress2);
         const result = await ens.resolve();
 
@@ -97,7 +100,7 @@ const suite = new Suite('ENS');
 
     if (utils.isResult(ethName.resolved_address)) {
       suite.test(`get content hash for: ${name}`, async (t) => {
-        const ens = new ENS();
+        const ens = new ENS(networkName, networkURL);
         await ens.init(name);
 
         const result = await ens.getContentHash();

@@ -5,6 +5,10 @@
     <img src="https://img.shields.io/npm/v/whoisens-lib.svg" alt="npm version">
   </a>
 
+  <a href="#" id="status-image-popup" title="Latest push build on default branch: " name="status-images" class="open-popup" data-ember-action="" data-ember-action-130="130">
+    <img src="https://travis-ci.org/whoisens/whoisens-lib.svg?branch=master" alt="build:">
+  </a>
+
   <a href="https://packagephobia.now.sh/result?p=whoisens-lib">
     <img src="https://packagephobia.now.sh/badge?p=whoisens-lib" alt="install size">
   </a>
@@ -44,8 +48,11 @@ import fetch from 'node-fetch';
 global.fetch = fetch;
 
 
+const networkName = 'mainnet';
+const networkURL = `https://${networkName}.infura.io/v3/<YOUR_KEY_HERE>`;
+
 // get name owner (registrar)
-const ens = new ENS();
+const ens = new ENS(networkName, networkURL);
 await ens.init('whoisens.eth');
 const result = await ens.getOwner();
 

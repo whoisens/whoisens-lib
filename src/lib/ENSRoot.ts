@@ -3,30 +3,29 @@ import config from './../config.json';
 import utils from '../utils/index.js';
 import jsonRCP from '../utils/json-rcp.js';
 
-import {Responder} from './Responder.js';
+import BaseClass from './BaseClass.js';
+import Config from './Config.js';
 import {IResponseResponseInfo} from './types.js';
 
-export default class ENSRoot extends Responder {
-    private readonly currentNetwork: string;
+export default class ENSRoot extends BaseClass {
     private readonly contractAddress: string;
 
-    constructor(networkName: string = config.defaultNetworkName) {
+    constructor() {
         super();
 
-        this.currentNetwork = networkName;
         this.contractAddress = this.getContractAddress();
     }
 
-    public async getController(ethName): Promise<IResponseResponseInfo> {
+    public async getController(address): Promise<IResponseResponseInfo> {
         const method = 'owner(bytes32)';
         const methodId = utils.getMethodID(method);
 
-        const nameNode = utils.remove0x(utils.node(ethName));
+        const addressNode = utils.remove0x(utils.node(address));
 
-        const data = [methodId, nameNode].join('');
+        const data = [methodId, addressNode].join('');
 
         const result = await jsonRCP.makeRequest({
-            networkName: this.currentNetwork,
+            url: Config.getInstance().getCurrentNetworkURL(),
             to: this.contractAddress,
             data
         });
@@ -37,23 +36,23 @@ export default class ENSRoot extends Responder {
             payload: data,
             parameters: {
                 methodId,
-                nameNode
+                addressNode
             },
             jsonRCPResult: result,
             result: utils.normalizeHex(result.data.result)
         });
     }
 
-    public async getResolver(ethName): Promise<IResponseResponseInfo> {
+    public async getResolver(address): Promise<IResponseResponseInfo> {
         const method = 'resolver(bytes32)';
         const methodId = utils.getMethodID(method);
 
-        const nameNode = utils.remove0x(utils.node(ethName));
+        const addressNode = utils.remove0x(utils.node(address));
 
-        const data = [methodId, nameNode].join('');
+        const data = [methodId, addressNode].join('');
 
         const result = await jsonRCP.makeRequest({
-            networkName: this.currentNetwork,
+            url: Config.getInstance().getCurrentNetworkURL(),
             to: this.contractAddress,
             data
         });
@@ -64,7 +63,7 @@ export default class ENSRoot extends Responder {
             payload: data,
             parameters: {
                 methodId,
-                nameNode
+                addressNode
             },
             jsonRCPResult: result,
             result: utils.normalizeHex(result.data.result)
@@ -72,6 +71,6 @@ export default class ENSRoot extends Responder {
     }
 
     public getContractAddress(): string {
-        return config.deployments[this.currentNetwork];
+        return config.deployments[Config.getInstance().getCurrentNetwork()];
     }
 }

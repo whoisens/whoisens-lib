@@ -1,3 +1,0 @@
-- add jsdocs
-- change contract & methods in response to RCP payload within data that was passed. Pass them when debug flag is passed
-- add in response current network

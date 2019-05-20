@@ -1,5 +1,3 @@
-import EventEmitter from 'events';
-
 import config from '../config.json';
 import {EthAddressType, IResponseResponseInfo} from './types.js';
 
@@ -8,10 +6,10 @@ import Registrar from './Registrar.js';
 import Resolver from './Resolver.js';
 import ReverseResolver from './ReverseResolver.js';
 import utils from '../utils/index.js';
+import BaseClass from './BaseClass.js';
+import Config from './Config.js';
 
-export default class ENS extends EventEmitter {
-    private readonly currentNetwork: string;
-
+export default class ENS extends BaseClass {
     private readonly ENSRoot: ENSRoot;
     private Registrar: Registrar;
     private Resolver: Resolver;
@@ -41,12 +39,13 @@ export default class ENS extends EventEmitter {
      */
     static EVENT_SET_RESPONSE = 'setResponse';
 
-    constructor(networkName: string = config.defaultNetworkName) {
+    constructor(networkName: string = config.defaultNetworkName, networkURL: string) {
         super();
 
-        this.currentNetwork = networkName;
+        Config.getInstance().setCurrentNetwork(networkName);
+        Config.getInstance().setCurrentNetworkURL(networkURL);
 
-        this.ENSRoot = new ENSRoot(this.currentNetwork);
+        this.ENSRoot = new ENSRoot();
     }
 
     getEthAddressType(): EthAddressType {
@@ -134,7 +133,7 @@ export default class ENS extends EventEmitter {
         const EVENT_PROPERTY = 'ownerResult';
 
         try {
-            this.Registrar = new Registrar(this.currentNetwork, this.ethAddress);
+            this.Registrar = new Registrar(this.ethAddress);
             await this.Registrar.init();
 
             const registrarOwnerResult = await this.Registrar.getOwner();
@@ -158,7 +157,7 @@ export default class ENS extends EventEmitter {
 
         try {
             if (!this.Registrar) {
-                this.Registrar = new Registrar(this.currentNetwork, this.ethAddress);
+                this.Registrar = new Registrar(this.ethAddress);
                 await this.Registrar.init();
             }
 
@@ -182,7 +181,7 @@ export default class ENS extends EventEmitter {
         const EVENT_PROPERTY = 'addressResult';
 
         try {
-            this.Resolver = new Resolver(this.currentNetwork, this.ethAddress);
+            this.Resolver = new Resolver(this.ethAddress);
             await this.Resolver.init();
 
             const resolverAddress = await this.Resolver.getAddress();
@@ -206,7 +205,7 @@ export default class ENS extends EventEmitter {
 
         try {
             if (!this.Resolver) {
-                this.Resolver = new Resolver(this.currentNetwork, this.ethAddress);
+                this.Resolver = new Resolver(this.ethAddress);
                 await this.Resolver.init();
             }
 
@@ -231,7 +230,7 @@ export default class ENS extends EventEmitter {
 
         try {
             const address = this.resolveAddress || this.ethAddress;
-            this.ReverseResolver = new ReverseResolver(this.currentNetwork, address);
+            this.ReverseResolver = new ReverseResolver(address);
             await this.ReverseResolver.init();
 
             const revertResolverResult = await this.ReverseResolver.getName();
