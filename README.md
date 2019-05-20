@@ -5,20 +5,13 @@
     <img src="https://img.shields.io/npm/v/whoisens-lib.svg" alt="npm version">
   </a>
 
-  <a href="#" id="status-image-popup" title="Latest push build on default branch: " name="status-images" class="open-popup" data-ember-action="" data-ember-action-130="130">
-    <img src="https://travis-ci.org/whoisens/whoisens-lib.svg?branch=master" alt="build:">
+  <a href="https://travis-ci.org/whoisens/whoisens-lib">
+    <img src="https://api.travis-ci.org/whoisens/whoisens-lib.svg?branch=master" alt="Build status">
   </a>
 
   <a href="https://packagephobia.now.sh/result?p=whoisens-lib">
     <img src="https://packagephobia.now.sh/badge?p=whoisens-lib" alt="install size">
   </a>
-
-  <!--
-  <a href="https://travis-ci.org/whoisens/whoisens-lib">
-    <img src="https://api.travis-ci.org/whoisens/whoisens-lib.svg?branch=master"
-         alt="build status">
-  </a>
-  -->
 
   <a href="https://github.com/whoisens/whoisens-lib/blob/master/LICENSE.md">
     <img src="https://img.shields.io/npm/l/whoisens-lib.svg" alt="license">
