@@ -1,25 +1,22 @@
-import config from '../config.json';
 import utils from '../utils/index.js';
 import jsonRCP from '../utils/json-rcp.js';
 
 import ENSRoot from './ENSRoot.js';
-import {Responder} from './Responder.js';
+import BaseClass from './BaseClass.js';
+import Config from './Config.js';
 import {IResponseResponseInfo, ResolveType} from './types.js';
 
-export default class ReverseResolver extends Responder {
+export default class ReverseResolver extends BaseClass {
     static REVERSE_DOMAIN = 'addr.reverse';
 
-    private readonly currentNetwork: string;
     private contractAddress: string;
 
     private readonly address: string;
     private readonly reverseAddress: string;
     private readonly reverseAddressNode: string;
 
-    constructor(networkName: string = config.defaultNetworkName, address: string) {
+    constructor(address: string) {
         super();
-
-        this.currentNetwork = networkName;
 
         this.address = address;
         this.reverseAddress = this.getReverseAddress(utils.remove0x(this.address));
@@ -38,7 +35,7 @@ export default class ReverseResolver extends Responder {
         const data = [methodId, reverseAddressNode].join('');
 
         const result = await jsonRCP.makeRequest({
-            networkName: this.currentNetwork,
+            url: Config.getInstance().getCurrentNetworkURL(),
             to: this.contractAddress,
             data
         });
@@ -61,7 +58,7 @@ export default class ReverseResolver extends Responder {
     }
 
     private async getContractAddress(): Promise<string> {
-        const ensRoot = new ENSRoot(this.currentNetwork);
+        const ensRoot = new ENSRoot();
         return <string>(await ensRoot.getResolver(this.reverseAddress)).result;
     }
 

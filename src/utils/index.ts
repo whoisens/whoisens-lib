@@ -1,7 +1,7 @@
 import jsSHA3 from 'js-sha3';
 import namehash from 'eth-ens-namehash';
 import contentHash from 'content-hash/dist/index.js';
-import {EthAddressType, ResolveType} from '../lib/types.js';
+import {EthAddressType} from '../lib/types.js';
 
 const CONTENT_HASH_CODEC_MAP = {
     'ipfs-ns': 'ipfs://',

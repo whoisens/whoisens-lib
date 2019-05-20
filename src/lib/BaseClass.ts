@@ -1,4 +1,5 @@
 import {IAdditionalDataInfo, IJSONRCPResponseResult} from './types';
+import EventEmitter from 'events';
 
 export interface IReturnResultParams {
     contractAddress: string;
@@ -10,7 +11,7 @@ export interface IReturnResultParams {
     data?: IAdditionalDataInfo;
 }
 
-export class Responder {
+export default class BaseClass extends EventEmitter {
     public returnResult(params: IReturnResultParams) {
         return {
             ethRCP: {

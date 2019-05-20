@@ -1,31 +1,28 @@
-import config from '../config.json';
 import utils from '../utils/index.js';
 import jsonRCP from '../utils/json-rcp.js';
 
 import ENSRoot from './ENSRoot.js';
-import {Responder} from './Responder.js';
+import BaseClass from './BaseClass.js';
+import Config from './Config.js';
 import {IResponseResponseInfo, EthAddressType} from './types.js';
 
-export default class Registrar extends Responder {
-    private readonly currentNetwork: string;
+export default class Registrar extends BaseClass {
     private contractAddress: string;
 
     private readonly ltd: string;
-    private readonly ethName: string;
-    private readonly ethNameHash: string;
+    private readonly address: string;
+    private readonly addressHash: string;
 
-    constructor(networkName: string = config.defaultNetworkName, ethAddress: string) {
+    constructor(address: string) {
         super();
 
-        if (utils.getAddressType(ethAddress) !== EthAddressType.name) throw 'Ethereum name should be provided';
+        if (utils.getAddressType(address) !== EthAddressType.name) throw 'Ethereum name should be provided';
 
-        this.currentNetwork = networkName;
+        this.address = address;
+        this.ltd = utils.getLTDfromDomain(this.address);
 
-        this.ethName = ethAddress;
-        this.ltd = utils.getLTDfromDomain(this.ethName);
-
-        const ethNameTopLabel = utils.getLabelsFromDomain(ethAddress).pop();
-        this.ethNameHash = utils.hash(ethNameTopLabel);
+        const addressTopLabel = utils.getLabelsFromDomain(address).pop();
+        this.addressHash = utils.hash(addressTopLabel);
     }
 
     public async init() {
@@ -36,10 +33,10 @@ export default class Registrar extends Responder {
         const method = 'ownerOf(uint256)';
         const methodId = utils.getMethodID(method);
 
-        const data = [methodId, this.ethNameHash].join('');
+        const data = [methodId, this.addressHash].join('');
 
         const result = await jsonRCP.makeRequest({
-            networkName: this.currentNetwork,
+            url: Config.getInstance().getCurrentNetworkURL(),
             to: this.contractAddress,
             data
         });
@@ -50,7 +47,7 @@ export default class Registrar extends Responder {
             payload: data,
             parameters: {
                 methodId,
-                ethNameHash: this.ethNameHash
+                addressHash: this.addressHash
             },
             jsonRCPResult: result,
             result: utils.normalizeHex(result.data.result)
@@ -61,10 +58,10 @@ export default class Registrar extends Responder {
         const method = 'nameExpires(uint256)';
         const methodId = utils.getMethodID(method);
 
-        const data = [methodId, this.ethNameHash].join('');
+        const data = [methodId, this.addressHash].join('');
 
         const result = await jsonRCP.makeRequest({
-            networkName: this.currentNetwork,
+            url: Config.getInstance().getCurrentNetworkURL(),
             to: this.contractAddress,
             data
         });
@@ -75,7 +72,7 @@ export default class Registrar extends Responder {
             payload: data,
             parameters: {
                 methodId,
-                ethNameHash: this.ethNameHash
+                addressHash: this.addressHash
             },
             jsonRCPResult: result,
             result: Number(result.data.result)
@@ -83,7 +80,7 @@ export default class Registrar extends Responder {
     }
 
     public async getContractAddress(): Promise<string> {
-        const ensRoot = new ENSRoot(this.currentNetwork);
+        const ensRoot = new ENSRoot();
         return <string>(await ensRoot.getController(this.ltd)).result;
     }
 }

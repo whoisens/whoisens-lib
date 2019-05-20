@@ -1,3 +1,11 @@
+## [1.0.0-beta.2] - 2019-05-20
+
+### Added
+
+- ability to set custom network url endpoint #2
+- integrated Travis CI
+
+
 ## [1.0.0-beta.1] - 2019-05-17
 
 API is changed.
