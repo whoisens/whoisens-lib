@@ -1,6 +1,6 @@
 import Suite from 'node-test';
 import fetch from 'node-fetch';
-import NAME_WHOISENS_ETH from './names/whoisens.eth.js';
+import NAME_WHOISENS_ETH from 'whoisens-test-dataset/dataset/whoisens.eth.js';
 
 global.fetch = fetch;
 
@@ -14,6 +14,7 @@ const suite = new Suite('ENS');
 
 const networkName = 'mainnet';
 const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517e3ce6321`;
+// const networkURL = `http://eth.gateway.whoisens.org`;
 
 (async () => {
   for (const ethName of NAME_WHOISENS_ETH.eth_names) {
@@ -21,8 +22,10 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
 
     suite.test(`get Eth Name owner for: ${name}`, async (t) => {
       const ens = new ENS(networkName, networkURL);
-      await ens.init(name);
+      ens.init(name);
       const result = await ens.getOwner();
+
+      t.falsey(result.error);
 
       t.equal(result.data.nameMain, NAME_MAIN);
       t.equal(result.data.address, name);
@@ -33,8 +36,10 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
 
     suite.test(`get Eth Name expiration date for: ${name}`, async (t) => {
       const ens = new ENS(networkName, networkURL);
-      await ens.init(name);
+      ens.init(name);
       const result = await ens.getExpirationDate();
+
+      t.falsey(result.error);
 
       t.equal(result.result, EXPIRES);
     });
@@ -42,8 +47,10 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
 
     suite.test(`get Controller for: ${name}`, async (t) => {
       const ens = new ENS(networkName, networkURL);
-      await ens.init(name);
+      ens.init(name);
       const result = await ens.getController();
+
+      t.falsey(result.error);
 
       t.equal(result.result, ethName.controller);
     });
@@ -51,11 +58,17 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
 
     suite.test(`get Resolve address for: ${name}`, async (t) => {
       const ens = new ENS(networkName, networkURL);
-      await ens.init(name);
+      ens.init(name);
       const result = await ens.resolve();
 
       t.equal(EthAddressType.name, ens.getEthAddressType());
-      t.equal(result.data.resolveType, ResolveType.forward);
+
+      if (!ethName.forward_resolver) {
+        t.equal(result.error, 'Resolver is not set');
+      } else {
+        t.falsey(result.error);
+        t.equal(result.data.resolveType, ResolveType.forward);
+      }
 
       if (utils.isResult(result.result) || utils.isResult(ethName.resolved_address)) {
         t.equal(result.result, ethName.resolved_address);
@@ -68,8 +81,10 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
     if (resolvedAddress && reverseResolvedAddress) {
       suite.test(`get Reverse address for: ${resolvedAddress}`, async (t) => {
         const ens = new ENS(networkName, networkURL);
-        await ens.init(resolvedAddress);
+        ens.init(resolvedAddress);
         const result = await ens.resolve();
+
+        t.falsey(result.error);
 
         t.equal(EthAddressType.address, ens.getEthAddressType());
         t.equal(result.data.resolveType, ResolveType.reverse);
@@ -84,8 +99,10 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
       const resolvedAddress2 = resolvedAddress.slice(2) + '.addr.reverse';
       suite.test(`get Reverse address for: ${resolvedAddress2}`, async (t) => {
         const ens = new ENS(networkName, networkURL);
-        await ens.init(resolvedAddress2);
+        ens.init(resolvedAddress2);
         const result = await ens.resolve();
+
+        t.falsey(result.error);
 
         t.equal(EthAddressType.address, ens.getEthAddressType());
         t.equal(result.data.resolveType, ResolveType.reverse);
@@ -101,9 +118,11 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
     if (utils.isResult(ethName.resolved_address)) {
       suite.test(`get content hash for: ${name}`, async (t) => {
         const ens = new ENS(networkName, networkURL);
-        await ens.init(name);
+        ens.init(name);
 
         const result = await ens.getContentHash();
+
+        t.falsey(result.error);
 
         t.equal(result.result, ethName.resolved_content);
       });

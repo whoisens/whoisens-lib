@@ -47,6 +47,7 @@ export interface IJSONRCPResponse {
     id: number;
     jsonrpc: string;
     result: string;
+    error?: object
 }
 
 export interface IJSONRCPResponseResult {
@@ -55,9 +56,9 @@ export interface IJSONRCPResponseResult {
 }
 
 export interface IResponseResponseInfo {
-    result: string | number;
+    result?: string | number;
     data?: IAdditionalDataInfo;
-    ethRCP: IEthJSONRCP;
+    ethRCP?: IEthJSONRCP;
     error?: string;
 }
 
@@ -65,6 +66,6 @@ export interface IAdditionalDataInfo {
     address?: string;
     addressParent?: string;
     nameMain?: string;
-    resolveType? :string;
+    resolveType?: string;
     reverseAddress?: string;
 }

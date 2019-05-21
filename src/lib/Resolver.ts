@@ -26,6 +26,8 @@ export default class Resolver extends BaseClass {
     }
 
     public async getAddress(): Promise<IResponseResponseInfo> {
+        if (!utils.isResult(this.contractAddress)) return {error: 'Resolver is not set'};
+
         const method = 'addr(bytes32)';
         const methodId = utils.getMethodID(method);
 

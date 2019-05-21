@@ -83,7 +83,6 @@ export default {
     decodeContentHash(string: string): object | undefined {
         if (!string) return;
 
-        //HACK: !
         string = this.byteToString(string);
         if (!string) return;
 
@@ -104,20 +103,16 @@ export default {
         return CONTENT_HASH_CODEC_MAP[codec];
     },
 
-    //https://github.com/ethereum/web3.js/blob/1.0/packages/web3-utils/src/index.js#L117
     hexToAscii(hex): string | undefined {
         if (!hex) return;
 
         let value = '';
-
         let i = 0;
-        const l = hex.length;
 
-        if (hex.substring(0, 2) === '0x') {
-            i = 2;
-        }
-        for (; i < l; i += 2) {
-            const code = parseInt(hex.substr(i, 2), 16);
+        if (hex.substring(0, 2) === '0x') i = 2;
+
+        for (; i < hex.length; i += 2) {
+            const code = parseInt(hex.substring(i, i + 2), 16);
             value += String.fromCharCode(code);
         }
 

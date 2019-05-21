@@ -1,4 +1,4 @@
-import {IAdditionalDataInfo, IJSONRCPResponseResult} from './types';
+import {IAdditionalDataInfo, IJSONRCPResponseResult, IResponseResponseInfo} from './types';
 import EventEmitter from 'events';
 
 export interface IReturnResultParams {
@@ -12,8 +12,10 @@ export interface IReturnResultParams {
 }
 
 export default class BaseClass extends EventEmitter {
-    public returnResult(params: IReturnResultParams) {
-        return {
+    public returnResult(params: IReturnResultParams): IResponseResponseInfo {
+        const response = params.jsonRCPResult.data;
+
+        const output = {
             ethRCP: {
                 request: {
                     id: params.jsonRCPResult.id,
@@ -22,10 +24,14 @@ export default class BaseClass extends EventEmitter {
                     payload: params.payload,
                     parameters: params.parameters
                 },
-                response: params.jsonRCPResult.data
+                response: response
             },
             result: params.result,
             data: params.data
         };
+
+        if (response.error) output['error'] = JSON.stringify(response.error);
+
+        return output;
     }
 }

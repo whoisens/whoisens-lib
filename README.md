@@ -1,4 +1,4 @@
-# WhoisENS API library
+# Whois ENS API library
 
 <p>
   <a href="https://www.npmjs.com/package/whoisens-lib">
@@ -13,7 +13,7 @@
     <img src="https://packagephobia.now.sh/badge?p=whoisens-lib" alt="install size">
   </a>
 
-  <a href="https://github.com/whoisens/whoisens-lib/blob/master/LICENSE.md">
+  <a href="https://github.com/whoisens/whoisens-lib/blob/master/LICENSE">
     <img src="https://img.shields.io/npm/l/whoisens-lib.svg" alt="license">
   </a>
 </p>
@@ -23,6 +23,9 @@ Lightweight library with minimum dependencies to work with ENS. Get owner/contro
 date expiration, resolve name/addresses.
 
 Works both on browser and Node.js.
+
+
+Library used by [Whois ENS](https://whoisens.org)
 
 
 ### Install

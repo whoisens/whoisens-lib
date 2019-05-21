@@ -1,3 +1,11 @@
+## [1.0.0-beta.3] - 2019-05-21
+
+### Changed
+- used external dataset
+- returns errors if JSON RCP has one
+- other small fixes
+
+
 ## [1.0.0-beta.2] - 2019-05-20
 
 ### Added

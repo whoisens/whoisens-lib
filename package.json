@@ -1,6 +1,6 @@
 {
   "name": "whoisens-lib",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "license": "MIT",
   "author": "Alex Ivasyuv",
   "homepage": "https://github.com/whoisens/whoisens-lib",
@@ -41,6 +41,7 @@
     "node-fetch": "^2.6.0",
     "node-test": "^1.2.4",
     "typedoc": "^0.14.2",
-    "typescript": "^3.4.5"
+    "typescript": "^3.4.5",
+    "whoisens-test-dataset": "0.0.3"
   }
 }
