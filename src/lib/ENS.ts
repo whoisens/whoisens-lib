@@ -269,7 +269,8 @@ export default class ENS extends BaseClass {
             ...result,
             data: {
                 ...result.data,
-                address: this.ethAddress
+                address: this.ethAddress,
+                addressType: this.ethAddressType
             }
         };
 
