@@ -44,7 +44,6 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
       t.equal(result.result, EXPIRES);
     });
 
-
     suite.test(`get Controller for: ${name}`, async (t) => {
       const ens = new ENS(networkName, networkURL);
       ens.init(name);
@@ -55,13 +54,12 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
       t.equal(result.result, ethName.controller);
     });
 
-
     suite.test(`get Resolve address for: ${name}`, async (t) => {
       const ens = new ENS(networkName, networkURL);
       ens.init(name);
       const result = await ens.resolve();
 
-      t.equal(EthAddressType.name, ens.getEthAddressType());
+      t.equal(ens.getEthAddressType(), EthAddressType.name);
 
       if (!ethName.forward_resolver) {
         t.equal(result.error, 'Resolver is not set');
@@ -86,7 +84,7 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
 
         t.falsey(result.error);
 
-        t.equal(EthAddressType.address, ens.getEthAddressType());
+        t.equal(result.data.addressType, EthAddressType.address);
         t.equal(result.data.resolveType, ResolveType.reverse);
         t.equal(result.data.reverseAddress, resolvedAddress.slice(2) + '.addr.reverse');
         t.equal(result.data.addressParent, 'addr.reverse');
@@ -104,7 +102,7 @@ const networkURL = `https://${networkName}.infura.io/v3/cd43214e1d7a423f9d28b517
 
         t.falsey(result.error);
 
-        t.equal(EthAddressType.address, ens.getEthAddressType());
+        t.equal(result.data.addressType, EthAddressType.address);
         t.equal(result.data.resolveType, ResolveType.reverse);
         t.equal(result.data.reverseAddress, resolvedAddress2);
         t.equal(result.data.addressParent, 'addr.reverse');

@@ -1,3 +1,9 @@
+## [1.0.0-beta.4] - 2019-05-21
+
+### Added
+- addressType to output
+
+
 ## [1.0.0-beta.3] - 2019-05-21
 
 ### Changed

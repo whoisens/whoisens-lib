@@ -65,6 +65,7 @@ export interface IResponseResponseInfo {
 export interface IAdditionalDataInfo {
     address?: string;
     addressParent?: string;
+    addressType?: EthAddressType;
     nameMain?: string;
     resolveType?: string;
     reverseAddress?: string;
