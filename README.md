@@ -45,7 +45,7 @@ global.fetch = fetch;
 
 
 const networkName = 'mainnet';
-const networkURL = `https://${networkName}.infura.io/v3/<YOUR_KEY_HERE>`;
+const networkURL = 'http://eth.gateway.whoisens.org'; // or infura https://${networkName}.infura.io/v3/<YOUR_KEY_HERE>
 
 // get name owner (registrar)
 const ens = new ENS(networkName, networkURL);

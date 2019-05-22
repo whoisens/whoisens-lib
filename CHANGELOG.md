@@ -1,3 +1,8 @@
+## [1.0.0-beta.4] - 2019-05-22
+
+### Changed
+- switched tests from infura to internal one http://eth.gateway.whoisens.org
+
 ## [1.0.0-beta.4] - 2019-05-21
 
 ### Added
