@@ -13,7 +13,7 @@ const EXPIRES = NAME_WHOISENS_ETH.expires;
 const suite = new Suite('ENS');
 
 const networkName = 'mainnet';
-const networkURL = 'http://eth.gateway.whoisens.org';
+const networkURL = 'https://eth.gateway.whoisens.org';
 
 (async () => {
   for (const ethName of NAME_WHOISENS_ETH.eth_names) {
