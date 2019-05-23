@@ -1,4 +1,10 @@
-## [1.0.0-beta.4] - 2019-05-22
+## [1.0.0-beta.6] - 2019-05-23
+
+### Changed
+- changed target from es2018 to es2017, so Edge understands it
+
+
+## [1.0.0-beta.5] - 2019-05-22
 
 ### Changed
 - switched tests from infura to internal one http://eth.gateway.whoisens.org
