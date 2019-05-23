@@ -2,6 +2,7 @@
 
 ### Changed
 - changed target from es2018 to es2017, so Edge understands it
+- changed http to https
 
 
 ## [1.0.0-beta.5] - 2019-05-22
