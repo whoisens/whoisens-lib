@@ -3,7 +3,7 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "target": "es2018",
+    "target": "es2017",
     "module": "es2015",
     "outDir": "dist/esm",
     "declaration": true,
