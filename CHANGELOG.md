@@ -1,3 +1,11 @@
+## [1.0.0-beta.7] - 2019-05-30
+
+### Changed
+- updated `whoisens-test-dataset`
+- updated README 
+- execute tests before npm publish
+
+
 ## [1.0.0-beta.6] - 2019-05-23
 
 ### Changed

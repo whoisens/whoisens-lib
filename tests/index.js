@@ -1,6 +1,6 @@
 import Suite from 'node-test';
 import fetch from 'node-fetch';
-import NAME_WHOISENS_ETH from 'whoisens-test-dataset/dataset/whoisens.eth.js';
+import NAME_WHOISENS_ETH from 'whoisens-test-dataset/dataset/whoisens.eth.json';
 
 global.fetch = fetch;
 

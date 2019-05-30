@@ -1,4 +1,4 @@
-# Whois ENS API library
+# WhoisENS library
 
 <p>
   <a href="https://www.npmjs.com/package/whoisens-lib">
@@ -19,13 +19,13 @@
 </p>
 
 
-Lightweight library with minimum dependencies to work with ENS. Get owner/controller info,
-date expiration, resolve name/addresses.
+Lightweight library with minimum dependencies to work with [ENS](https://ens.domains/) (Ethereum Name Service). Get owner/controller info,
+date expiration, resolve name/addresses, get contenthash (IPFS/Swarm). Advanced output, including using contracts addresses, their methods, payloads, etc...
 
 Works both on browser and Node.js.
 
 
-Library used by [Whois ENS](https://whoisens.org)
+Library used by [WhoisENS.org](https://whoisens.org)
 
 
 ### Install
@@ -42,7 +42,6 @@ npm i whoisens-lib
 // In case running on Node.js, install and export globally `fetch`
 import fetch from 'node-fetch';
 global.fetch = fetch;
-
 
 const networkName = 'mainnet';
 const networkURL = 'https://eth.gateway.whoisens.org'; // or infura https://${networkName}.infura.io/v3/<YOUR_KEY_HERE>

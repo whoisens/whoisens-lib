@@ -1,6 +1,6 @@
 {
   "name": "whoisens-lib",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.7",
   "license": "MIT",
   "author": "Alex Ivasyuv",
   "homepage": "https://github.com/whoisens/whoisens-lib",
@@ -13,8 +13,11 @@
   "keywords": [
     "ENS",
     "ethereum",
+    "Ethereum Name Service",
     "whois",
     "resolve",
+    "reverse resolve",
+    "contenthash",
     "nodejs",
     "javascript",
     "typescript"
@@ -29,7 +32,7 @@
     "test": "rm -rf ./dist && npm run build:esm && npm run test:only",
     "test:only": "node --experimental-modules --experimental-json-modules tests/index.js",
     "docs": "rm -rf ./api-docs && npx typedoc --out api-docs",
-    "prepublishOnly": "rm -rf ./dist && npm run build:esm && npm run build:cjs"
+    "prepublishOnly": "rm -rf ./dist && npm run build:esm && npm run build:cjs && npm run test:only"
   },
   "dependencies": {
     "content-hash": "^2.3.2",
@@ -42,6 +45,6 @@
     "node-test": "^1.2.4",
     "typedoc": "^0.14.2",
     "typescript": "^3.4.5",
-    "whoisens-test-dataset": "0.0.3"
+    "whoisens-test-dataset": "^0.1.0"
   }
 }
