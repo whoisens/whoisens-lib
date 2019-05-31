@@ -1,21 +1,6 @@
-import Suite from 'node-test';
-import fetch from 'node-fetch';
-import NAME_WHOISENS_ETH from 'whoisens-test-dataset/dataset/whoisens.eth.json';
-
-global.fetch = fetch;
-
-import ENS, {ResolveType, EthAddressType, utils} from '../dist/esm/index.js';
-
-const NAME_MAIN = NAME_WHOISENS_ETH.main_name;
-const OWNER = NAME_WHOISENS_ETH.owner;
-const EXPIRES = NAME_WHOISENS_ETH.expires;
-
-const suite = new Suite('ENS');
-
-const networkName = 'mainnet';
-const networkURL = 'https://eth.gateway.whoisens.org';
-
 (async () => {
+  const suite = new Suite('ENS');
+
   for (const ethName of NAME_WHOISENS_ETH.eth_names) {
     const name = ethName.name;
 
@@ -126,5 +111,3 @@ const networkURL = 'https://eth.gateway.whoisens.org';
     }
   }
 })();
-
-

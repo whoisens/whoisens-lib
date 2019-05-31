@@ -1,4 +1,4 @@
-import config from '../config.json';
+import config from '../config.js';
 import {EthAddressType, IResponseResponseInfo} from './types.js';
 
 import ENSRoot from './ENSRoot.js';

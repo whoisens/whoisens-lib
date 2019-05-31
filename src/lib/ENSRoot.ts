@@ -1,4 +1,4 @@
-import config from './../config.json';
+import config from './../config.js';
 
 import utils from '../utils/index.js';
 import jsonRCP from '../utils/json-rcp.js';
