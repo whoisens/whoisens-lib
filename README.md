@@ -80,7 +80,7 @@ It'll include default [ESM](https://nodejs.org/api/esm.html) module.
 
 #### CommonJS (Node.js)
 
-```
+```javascript
 const WhoisENS = require('whoisens-lib/cjs/index.js');
 
 const ENS = WhoisENS.default;
