@@ -1,4 +1,4 @@
-import config from './config.json';
+import config from './config.js';
 
 import {EthAddressType, ISetResponse, ISetResponseError, IResponse, ResolveType} from './lib/types.js';
 import ContractNames from './lib/ContractNames.js';

@@ -1,6 +1,6 @@
 {
   "name": "whoisens-lib",
-  "version": "1.0.0-beta.7",
+  "version": "1.0.0-beta.8",
   "license": "MIT",
   "author": "Alex Ivasyuv",
   "homepage": "https://github.com/whoisens/whoisens-lib",
@@ -28,9 +28,22 @@
   "scripts": {
     "build:esm": "npx tsc",
     "build:cjs": "npx tsc --target es5 --module commonjs --outDir dist/cjs",
+    "build:browser": "npx webpack ./dist/esm/index.js --output-path=dist/browser --output-library=WhoisENS",
     "build:watch": "rm -rf ./dist && npx tsc -w",
-    "test": "rm -rf ./dist && npm run build:esm && npm run test:only",
-    "test:only": "node --experimental-modules --experimental-json-modules tests/index.js",
+    "test": "npm run test-node && npm run test-browser",
+    "test:only": "npm run test-node:only && npm run test-browser:only",
+    "test-node": "rm -rf ./dist && npm run test-node-esm",
+    "test-node:only": "npm run test-node-esm:only",
+    "test-node-esm": "rm -rf ./dist && npm run build:esm && npm run test-node-esm:only",
+    "test-node-esm:only": "node --experimental-modules --experimental-json-modules tests/nodejs/esm.js",
+    "test-node-cjs": "rm -rf ./dist && npm run build:cjs && npm run test-node-cjs:only",
+    "test-node-cjs:only": "node tests/nodejs/cjs.js",
+    "test-browser": "npm run test-browser-esm && npm run test-browser-bundle",
+    "test-browser:only": "npm run test-browser-esm:only && npm run test-browser-bundle:only",
+    "test-browser-esm": "rm -rf ./dist && npm run build:esm && npm run test-browser-esm:only",
+    "test-browser-esm:only": "npx karma start tests/browser/karma.conf.esm.js --single-run",
+    "test-browser-bundle": "rm -rf ./dist && npm run build:esm && npm run build:browser && npm run test-browser-bundle:only",
+    "test-browser-bundle:only": "npx karma start tests/browser/karma.conf.bundle.js --single-run",
     "docs": "rm -rf ./api-docs && npx typedoc --out api-docs",
     "prepublishOnly": "rm -rf ./dist && npm run build:esm && npm run build:cjs && npm run test:only"
   },
@@ -40,11 +53,19 @@
     "js-sha3": "^0.8.0"
   },
   "devDependencies": {
-    "@types/node": "^12.0.2",
+    "@types/node": "^12.0.4",
+    "chai": "^4.2.0",
+    "karma": "^4.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-mocha": "^1.3.0",
+    "karma-webpack": "^3.0.5",
+    "mocha": "^6.1.4",
     "node-fetch": "^2.6.0",
     "node-test": "^1.2.4",
     "typedoc": "^0.14.2",
-    "typescript": "^3.4.5",
+    "typescript": "^3.5.1",
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2",
     "whoisens-test-dataset": "^0.1.0"
   }
 }

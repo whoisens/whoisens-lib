@@ -1,3 +1,16 @@
+## [1.0.0-beta.8] - 2019-05-31
+
+### Added
+- dependencies & devDependencies shields
+- build dist for browsers `npm run build:browser`
+- added test for browsers as well
+
+
+### Changed
+- updated dependencies
+- separated browser and nodejs tests
+
+
 ## [1.0.0-beta.7] - 2019-05-30
 
 ### Changed
