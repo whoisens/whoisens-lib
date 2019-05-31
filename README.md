@@ -87,7 +87,7 @@ const ENS = WhoisENS.default;
 const {ResolveType, EthAddressType, utils} = WhoisENS;
 ```
 
-### Script (browser)
+#### Script (browser)
 
 ```html
 <script src="https://unpkg.com/whoisens-lib/dist/browser/main.js"></script>
