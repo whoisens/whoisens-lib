@@ -22,14 +22,35 @@
 </p>
 
 
-Lightweight library with minimum dependencies to work with [ENS](https://ens.domains/) (Ethereum Name Service). Get owner/controller info,
-date expiration, resolve name/addresses, get contenthash (IPFS/Swarm). Advanced output, including using contracts addresses, their methods, payloads, etc...
+Lightweight library with minimum dependencies to work with [ENS](https://ens.domains/) (Ethereum Name Service).
 
-Works both on browser and Node.js.
+## Features
+- get owner/controller information
+- get name date expiration
+- resolve name to addresses and address to name
+- get contenthash (IPFS/Swarm) 
 
+Works with both browser and Node.js.
 
 Library used by [WhoisENS.org](https://whoisens.org)
 
+> PLEASE NOTE: whoisens-lib doesn't work with old ENS registrar (names registered via auction).
+These names [should be migrated to new ENS registrar by May 4, 2020](https://medium.com/the-ethereum-name-service/where-you-can-use-the-new-ens-registrar-d209833c6eda).
+
+## Advantages
+
+- advanced output. You can debug what contract was used, what method was called, what payload was passed and more other info
+- `resolve` method accept and resolves both names and addresses. You don't need to check it manually
+- content hash returns already decoded
+- lightweight
+- you can include it directly in your browser via `<script>`, for example you can't do it with Web3.js
+
+
+## How it works?
+
+![](./docs/ENS.png)
+
+For more information, please read [ENS (Ethereum Name Service): How it works?](https://medium.com/@industral/ens-ethereum-name-service-how-it-works-cc57ed296473)
 
 ### Install
 
@@ -96,6 +117,11 @@ const {ResolveType, EthAddressType, utils} = WhoisENS;
   const {ResolveType, EthAddressType, utils} = WhoisENS;
 </script>
 ```
+
+
+#### REST API
+If you don't willing to include any libraries, you can use [WhoisENS REST API](https://github.com/whoisens/whoisens-rest-api) directly.
+
 
 ### Build (development)
 
