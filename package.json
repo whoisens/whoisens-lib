@@ -26,6 +26,7 @@
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
+    "build": "npm run build:esm && npm run build:cjs && npm run build:browser",
     "build:esm": "npx tsc",
     "build:cjs": "npx tsc --target es5 --module commonjs --outDir dist/cjs",
     "build:browser": "npx webpack ./dist/esm/index.js --output-path=dist/browser --output-library=WhoisENS",
@@ -45,7 +46,7 @@
     "test-browser-bundle": "rm -rf ./dist && npm run build:esm && npm run build:browser && npm run test-browser-bundle:only",
     "test-browser-bundle:only": "npx karma start tests/browser/karma.conf.bundle.js --single-run",
     "docs": "rm -rf ./api-docs && npx typedoc --out api-docs",
-    "prepublishOnly": "rm -rf ./dist && npm run build:esm && npm run build:cjs && npm run test:only"
+    "prepublishOnly": "rm -rf ./dist && npm run build && npm run test:only"
   },
   "dependencies": {
     "content-hash": "^2.3.2",
