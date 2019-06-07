@@ -37,7 +37,7 @@
     "build:cjs": "npx tsc -p tsconfig-cjs.json && npx tscpaths -p ./tsconfig-cjs.json -s ./src -o ./dist/cjs",
     "build:browser": "npx webpack ./dist/esm/index.js --output-path=dist/browser --output-library=WhoisENS",
     "build:watch": "npm run clean && npx tsc -w",
-    "test": "npm run test-node && npm run test-browser",
+    "test": "time npm run test-node && npm run test-browser",
     "test:only": "npm run test-node:only && npm run test-browser:only",
     "test-node": "npm run clean && npm run test-node-esm && npm run test-node-cjs",
     "test-node:only": "npm run test-node-esm:only && npm run test-node-cjs:only",
