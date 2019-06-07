@@ -18,6 +18,7 @@ require('../../specs/main.js')(moduleTest, NAME_WHOISENS_ETH, 'https://eth.gatew
 require('../../specs/main.js')(moduleTest, NAME_WHOISENS_ETH, 'https://eth.gateway.whoisens.org/mainnet/geth/stable', '0x314159265dd8dbb310642f98f50c066173c1259b');
 require('../../specs/main.js')(moduleTest, NAME_WHOISENS_ETH, 'https://eth.gateway.whoisens.org/mainnet/geth/unstable');
 require('../../specs/main.js')(moduleTest, NAME_WHOISENS_ETH, 'https://eth.gateway.whoisens.org/mainnet/parity');
+require('../../specs/main.js')(moduleTest, NAME_WHOISENS_ETH, 'https://mainnet.infura.io/v3/b608a8ce95964c469961c30385809cca');
 
 require('../../specs/main.js')(moduleTest, NAME_UNICODE);
 require('../../specs/handle-errors.js')(moduleTest, 'testtesttest.eth');
