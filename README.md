@@ -1,25 +1,11 @@
 # WhoisENS library
 
-<p>
-    <a href="https://www.npmjs.com/package/whoisens-lib">
-        <img src="https://img.shields.io/npm/v/whoisens-lib.svg" alt="npm version">
-    </a>
-    <a href="https://travis-ci.org/whoisens/whoisens-lib">
-        <img src="https://api.travis-ci.org/whoisens/whoisens-lib.svg?branch=master" alt="Build status">
-    </a>
-    <a href="https://david-dm.org/whoisens/whoisens-lib">
-        <img src="https://david-dm.org/whoisens/whoisens-lib/status.svg" alt="dependencies status">
-    </a>
-    <a href="https://david-dm.org/whoisens/whoisens-lib?type=dev">
-        <img src="https://david-dm.org/whoisens/whoisens-lib/dev-status.svg" alt="dependencies status">
-    </a>
-    <a href="https://packagephobia.now.sh/result?p=whoisens-lib">
-        <img src="https://packagephobia.now.sh/badge?p=whoisens-lib" alt="install size">
-    </a>
-    <a href="https://github.com/whoisens/whoisens-lib/blob/master/LICENSE">
-        <img src="https://img.shields.io/npm/l/whoisens-lib.svg" alt="license">
-    </a>
-</p>
+![https://www.npmjs.com/package/whoisens-lib](https://img.shields.io/npm/v/whoisens-lib.svg)
+![https://travis-ci.org/whoisens/whoisens-lib](https://api.travis-ci.org/whoisens/whoisens-lib.svg?branch=master)
+![https://david-dm.org/whoisens/whoisens-lib](https://david-dm.org/whoisens/whoisens-lib/status.svg)
+![https://david-dm.org/whoisens/whoisens-lib?type=dev](https://david-dm.org/whoisens/whoisens-lib/dev-status.svg)
+![https://packagephobia.now.sh/result?p=whoisens-lib](https://packagephobia.now.sh/badge?p=whoisens-lib)
+![https://github.com/whoisens/whoisens-lib/blob/master/LICENSE](https://img.shields.io/npm/l/whoisens-lib.svg)
 
 
 Lightweight library with minimum dependencies to work with [ENS](https://ens.domains/) (Ethereum Name Service).
@@ -28,7 +14,8 @@ Lightweight library with minimum dependencies to work with [ENS](https://ens.dom
 - get owner/controller information
 - get name date expiration
 - resolve name to addresses and address to name
-- get contenthash (IPFS/Swarm) 
+- get contenthash (IPFS/Swarm)
+- thorough tests
 
 Works with both browser and Node.js.
 
@@ -67,13 +54,19 @@ npm i whoisens-lib
 import fetch from 'node-fetch';
 global.fetch = fetch;
 
-const networkName = 'mainnet';
-const networkURL = 'https://eth.gateway.whoisens.org';
-// const networkURL = `https://${networkName}.infura.io/v3/<YOUR_KEY_HERE>`;
+// basic constructor
+const ens = new ENS();
+
+// pass custom networkURL
+const ens = new ENS({networkURL: 'https://eth.gateway.whoisens.org'});
+const ens = new ENS({networkURL: 'https://mainnet.infura.io/v3/<YOUR_KEY>'});
+
+// pass custom eth contractAddress
+const ens = new ENS({contractAddress: '0x314159265dd8dbb310642f98f50c066173c1259b'});
 
 // get name owner (registrar)
-const ens = new ENS(networkName, networkURL);
-await ens.init('whoisens.eth');
+const ens = new ENS();
+ens.init('whoisens.eth');
 const result = await ens.getOwner();
 
 // get name expiration date
@@ -145,3 +138,8 @@ npm run build
 ```bash
 npm run test
 ```
+
+
+### Logs
+
+[Debug](https://www.npmjs.com/package/debug) modules is used.

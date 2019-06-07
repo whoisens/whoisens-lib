@@ -1,15 +1,12 @@
 import utils from '../utils/index.js';
-import jsonRCP from '../utils/json-rcp.js';
+import jsonRCP from '../utils/json-rpc.js';
 
 import ENSRoot from './ENSRoot.js';
 import BaseClass from './BaseClass.js';
-import Config from './Config.js';
-import {IResponseResponseInfo, ResolveType} from './types.js';
+import {IResponseResponseInfo, ResolverNotSetError, ResolveType} from './types.js';
 
 export default class ReverseResolver extends BaseClass {
     static REVERSE_DOMAIN = 'addr.reverse';
-
-    private contractAddress: string;
 
     private readonly address: string;
     private readonly reverseAddress: string;
@@ -23,19 +20,18 @@ export default class ReverseResolver extends BaseClass {
         this.reverseAddressNode = utils.node(this.reverseAddress);
     }
 
-    public async init(): Promise<void> {
-        this.contractAddress = await this.getContractAddress();
-    }
-
     public async getName(): Promise<IResponseResponseInfo> {
+        await this.init();
+
+        if (!utils.isResult(this.contractAddress)) throw new ResolverNotSetError();
+
         const method = 'name(bytes32)';
         const methodId = utils.getMethodID(method);
 
         const reverseAddressNode = utils.remove0x(this.reverseAddressNode);
         const data = [methodId, reverseAddressNode].join('');
 
-        const result = await jsonRCP.makeRequest({
-            url: Config.getInstance().getCurrentNetworkURL(),
+        const result = await jsonRCP.getInstance().makeRequest({
             to: this.contractAddress,
             data
         });
@@ -49,7 +45,7 @@ export default class ReverseResolver extends BaseClass {
                 reverseAddressNode
             },
             jsonRCPResult: result,
-            result: utils.hexToAscii(utils.byteToString(result.data.result, true)),
+            result: utils.hexToAscii(utils.byteToString(result.result, true)),
             data: {
                 resolveType: ResolveType.reverse,
                 reverseAddress: this.reverseAddress
@@ -57,12 +53,16 @@ export default class ReverseResolver extends BaseClass {
         });
     }
 
-    private async getContractAddress(): Promise<string> {
+    private async findContractAddress(): Promise<string> {
         const ensRoot = new ENSRoot();
         return <string>(await ensRoot.getResolver(this.reverseAddress)).result;
     }
 
     private getReverseAddress(address: string): string {
         return `${address}.${ReverseResolver.REVERSE_DOMAIN}`
+    }
+
+    private async init(): Promise<void> {
+        this.contractAddress = await this.findContractAddress();
     }
 }

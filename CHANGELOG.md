@@ -1,3 +1,30 @@
+## [1.0.1] - 2019-06-07
+
+### Added
+- infura.io network test
+
+
+### Fixed
+- wrong package path
+- README
+
+
+## [1.0.0] - 2019-06-07
+
+Breaking API changes (constructor parameters).
+
+### Added
+- unicode support
+- new tests to handle non-existed names #21
+
+### Changed
+- constructor parameters. Now parameters is optional #13
+Default network is https://eth.gateway.whoisens.org and networkId is taken from JSON-RPC call. 
+- migrated to [JSON-RPC3](https://github.com/industral/JSON-RPC3)
+- improved tests 
+- moved common tests #22
+
+
 ## [1.0.0-beta.8] - 2019-05-31
 
 ### Added
@@ -9,6 +36,10 @@
 ### Changed
 - updated dependencies
 - separated browser and nodejs tests
+
+### Fixed
+- CommonJS doesn't work #14
+- Add unit test in real browser #12
 
 
 ## [1.0.0-beta.7] - 2019-05-30

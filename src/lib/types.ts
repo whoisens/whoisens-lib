@@ -10,6 +10,11 @@ export enum ResolveType {
     error = 'error'
 }
 
+export interface IENSParams {
+    networkURL?: string;
+    contractAddress?: string;
+}
+
 export interface ISetResponse {
     resultName: string;
     result: Response;
@@ -50,13 +55,9 @@ export interface IJSONRCPResponse {
     error?: object
 }
 
-export interface IJSONRCPResponseResult {
-    id: number;
-    data: IJSONRCPResponse;
-}
-
 export interface IResponseResponseInfo {
     result?: string | number;
+    resultError?: Error;
     data?: IAdditionalDataInfo;
     ethRCP?: IEthJSONRCP;
     error?: string;
@@ -69,4 +70,40 @@ export interface IAdditionalDataInfo {
     nameMain?: string;
     resolveType?: string;
     reverseAddress?: string;
+}
+
+export class NameIsNotRegisteredError extends Error {
+    private readonly code;
+
+    constructor(message = 'Name is not registered') {
+        super();
+
+        this.name = 'NameIsNotRegisteredError';
+        this.code = 'NAME_IS_NOT_REGISTERED';
+        this.message = message;
+    }
+}
+
+export class ResolverNotSetError extends Error {
+    private readonly code;
+
+    constructor(message = 'Resolver is not set') {
+        super();
+
+        this.name = 'ResolverNotSetError';
+        this.code = 'RESOLVER_NOT_SET';
+        this.message = message;
+    }
+}
+
+export class InvalidEthNameError extends Error {
+    private readonly code;
+
+    constructor(recieved, message = 'Invalid address or name') {
+        super();
+
+        this.name = 'InvalidEthNameError';
+        this.code = 'INVALID_ETH_NAME';
+        this.message = message + `. Got: ${recieved}`;
+    }
 }

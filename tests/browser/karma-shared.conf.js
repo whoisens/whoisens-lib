@@ -1,5 +1,11 @@
 module.exports = {
 
+  client: {
+    mocha: {
+      timeout: 5000
+    }
+  },
+
   // base path that will be used to resolve all patterns (eg. files, exclude)
   basePath: '',
 

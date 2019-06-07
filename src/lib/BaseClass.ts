@@ -1,4 +1,4 @@
-import {IAdditionalDataInfo, IJSONRCPResponseResult, IResponseResponseInfo} from './types';
+import {IAdditionalDataInfo, IJSONRCPResponse, IResponseResponseInfo} from './types';
 import EventEmitter from 'events';
 
 export interface IReturnResultParams {
@@ -6,14 +6,17 @@ export interface IReturnResultParams {
     contractMethod: string;
     payload: string;
     parameters: object;
-    jsonRCPResult: IJSONRCPResponseResult;
+    jsonRCPResult: IJSONRCPResponse;
     result: string | number;
+    resultError?: Error;
     data?: IAdditionalDataInfo;
 }
 
 export default class BaseClass extends EventEmitter {
+    protected contractAddress: string;
+
     public returnResult(params: IReturnResultParams): IResponseResponseInfo {
-        const response = params.jsonRCPResult.data;
+        const response = params.jsonRCPResult;
 
         const output = {
             ethRCP: {
@@ -30,8 +33,13 @@ export default class BaseClass extends EventEmitter {
             data: params.data
         };
 
+        if (params.resultError) output['resultError'] = params.resultError;
         if (response.error) output['error'] = JSON.stringify(response.error);
 
         return output;
+    }
+
+    getContractAddress() {
+        return this.contractAddress;
     }
 }

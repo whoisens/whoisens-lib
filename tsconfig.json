@@ -5,8 +5,6 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
-    "module": "es2015",
-    "outDir": "dist/esm",
     "declaration": true,
     "sourceMap": true,
     "lib": [
@@ -14,7 +12,8 @@
       "dom",
       "dom.iterable",
       "scripthost"
-    ]
+    ],
+    "baseUrl": "."
   },
   "include": [
     "src/**/*"

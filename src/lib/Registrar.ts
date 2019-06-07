@@ -1,14 +1,16 @@
 import utils from '../utils/index.js';
-import jsonRCP from '../utils/json-rcp.js';
+import jsonRCP from '../utils/json-rpc.js';
 
 import ENSRoot from './ENSRoot.js';
 import BaseClass from './BaseClass.js';
-import Config from './Config.js';
-import {IResponseResponseInfo, EthAddressType} from './types.js';
+import {
+    IResponseResponseInfo,
+    EthAddressType,
+    InvalidEthNameError,
+    NameIsNotRegisteredError
+} from './types.js';
 
 export default class Registrar extends BaseClass {
-    private contractAddress: string;
-
     private readonly ltd: string;
     private readonly address: string;
     private readonly addressHash: string;
@@ -16,7 +18,7 @@ export default class Registrar extends BaseClass {
     constructor(address: string) {
         super();
 
-        if (utils.getAddressType(address) !== EthAddressType.name) throw 'Ethereum name should be provided';
+        if (utils.getAddressType(address) !== EthAddressType.name) throw new InvalidEthNameError(address, 'Ethereum name should be provided');
 
         this.address = address;
         this.ltd = utils.getLTDfromDomain(this.address);
@@ -25,21 +27,20 @@ export default class Registrar extends BaseClass {
         this.addressHash = utils.hash(addressTopLabel);
     }
 
-    public async init() {
-        this.contractAddress = await this.getContractAddress();
-    }
-
     public async getOwner(): Promise<IResponseResponseInfo> {
+        await this.init();
+
         const method = 'ownerOf(uint256)';
         const methodId = utils.getMethodID(method);
 
-        const data = [methodId, this.addressHash].join('');
+        const data = `${methodId}${this.addressHash}`;
 
-        const result = await jsonRCP.makeRequest({
-            url: Config.getInstance().getCurrentNetworkURL(),
+        const result = await jsonRCP.getInstance().makeRequest({
             to: this.contractAddress,
             data
         });
+
+        const isResult = utils.isResult(result.result);
 
         return this.returnResult({
             contractAddress: this.contractAddress,
@@ -50,21 +51,26 @@ export default class Registrar extends BaseClass {
                 addressHash: this.addressHash
             },
             jsonRCPResult: result,
-            result: utils.normalizeHex(result.data.result)
+            result: utils.normalizeHex(result.result),
+            resultError: !isResult && new NameIsNotRegisteredError()
         });
     }
 
     public async getExpirationDate(): Promise<IResponseResponseInfo> {
+        await this.init();
+
         const method = 'nameExpires(uint256)';
         const methodId = utils.getMethodID(method);
 
         const data = [methodId, this.addressHash].join('');
 
-        const result = await jsonRCP.makeRequest({
-            url: Config.getInstance().getCurrentNetworkURL(),
+        const result = await jsonRCP.getInstance().makeRequest({
             to: this.contractAddress,
             data
         });
+
+        const timestamp = Number(result.result);
+        const isResult = utils.isResult(timestamp);
 
         return this.returnResult({
             contractAddress: this.contractAddress,
@@ -75,12 +81,17 @@ export default class Registrar extends BaseClass {
                 addressHash: this.addressHash
             },
             jsonRCPResult: result,
-            result: Number(result.data.result)
+            result: timestamp,
+            resultError: !isResult && new NameIsNotRegisteredError()
         });
     }
 
-    public async getContractAddress(): Promise<string> {
+    public async findContractAddress(): Promise<string> {
         const ensRoot = new ENSRoot();
         return <string>(await ensRoot.getController(this.ltd)).result;
+    }
+
+    private async init() {
+        this.contractAddress = await this.findContractAddress();
     }
 }
