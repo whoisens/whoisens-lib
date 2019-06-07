@@ -58,10 +58,11 @@ global.fetch = fetch;
 const ens = new ENS();
 
 // pass custom networkURL
-const ens = new ENS('https://eth.gateway.whoisens.org');
+const ens = new ENS({networkURL: 'https://eth.gateway.whoisens.org'});
+const ens = new ENS({networkURL: 'https://mainnet.infura.io/v3/<YOUR_KEY>'});
 
-// pass custom networkURL and eth contractAddress
-const ens = new ENS('https://mainnet.infura.io/v3/<YOUR_KEY>', '0x314159265dd8dbb310642f98f50c066173c1259b');
+// pass custom eth contractAddress
+const ens = new ENS({contractAddress: '0x314159265dd8dbb310642f98f50c066173c1259b'});
 
 // get name owner (registrar)
 const ens = new ENS();

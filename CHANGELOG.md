@@ -1,7 +1,12 @@
 ## [1.0.1] - 2019-06-07
 
 ### Added
-- infura network test
+- infura.io network test
+
+
+### Fixed
+- wrong package path
+- README
 
 
 ## [1.0.0] - 2019-06-07
