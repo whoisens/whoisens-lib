@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "es2015",
+    "outDir": "dist/esm",
+    "paths": {
+      "json-rpc3": ["./node_modules/json-rpc3/dist/esm/index.js"]
+    }
+  }
+}

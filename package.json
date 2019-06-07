@@ -1,6 +1,6 @@
 {
   "name": "whoisens-lib",
-  "version": "1.0.0-beta.8",
+  "version": "1.0.0",
   "license": "MIT",
   "author": "Alex Ivasyuv",
   "homepage": "https://github.com/whoisens/whoisens-lib",
@@ -9,7 +9,7 @@
     "url": "https://github.com/whoisens/whoisens-lib.git"
   },
   "bugs": "https://github.com/whoisens/whoisens-lib/issues",
-  "description": "Whois for ENS (Ethereum Name Service)",
+  "description": "Whois for ENS (Ethereum Name Service) lookup service",
   "keywords": [
     "ENS",
     "ethereum",
@@ -25,15 +25,16 @@
   "type": "module",
   "engines": {
     "node": ">=10.0.0",
-    "npm": ">=5.7.0"
+    "npm": ">=5.6.0"
   },
   "main": "dist/esm/index.js",
+  "browser": "dist/browser/main.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:browser",
-    "build:esm": "npx tsc",
-    "build:cjs": "npx tsc --target es5 --module commonjs --outDir dist/cjs",
+    "build:esm": "npx tsc -p tsconfig-esm.json && npx tscpaths -p ./tsconfig-esm.json -s ./src -o ./dist/esm",
+    "build:cjs": "npx tsc -p tsconfig-cjs.json && npx tscpaths -p ./tsconfig-cjs.json -s ./src -o ./dist/cjs",
     "build:browser": "npx webpack ./dist/esm/index.js --output-path=dist/browser --output-library=WhoisENS",
     "build:watch": "npm run clean && npx tsc -w",
     "test": "npm run test-node && npm run test-browser",
@@ -41,37 +42,40 @@
     "test-node": "npm run clean && npm run test-node-esm && npm run test-node-cjs",
     "test-node:only": "npm run test-node-esm:only && npm run test-node-cjs:only",
     "test-node-esm": "npm run clean && npm run build:esm && npm run test-node-esm:only",
-    "test-node-esm:only": "node --experimental-modules --experimental-json-modules tests/nodejs/esm.js",
+    "test-node-esm:only": "mocha -r esm tests/nodejs/modules/esm.js",
     "test-node-cjs": "npm run clean && npm run build:cjs && npm run test-node-cjs:only",
-    "test-node-cjs:only": "node tests/nodejs/cjs.js",
-    "test-browser": "npm run test-browser-esm && npm run test-browser-bundle",
-    "test-browser:only": "npm run test-browser-esm:only && npm run test-browser-bundle:only",
+    "test-node-cjs:only": "mocha -r esm tests/nodejs/modules/cjs.js",
+    "test-browser": "npm run test-browser-esm && npm run test-browser-script",
+    "test-browser:only": "npm run test-browser-esm:only && npm run test-browser-script:only",
     "test-browser-esm": "npm run clean && npm run build:esm && npm run test-browser-esm:only",
     "test-browser-esm:only": "npx karma start tests/browser/karma.conf.esm.js --single-run",
-    "test-browser-bundle": "npm run clean && npm run build:esm && npm run build:browser && npm run test-browser-bundle:only",
-    "test-browser-bundle:only": "npx karma start tests/browser/karma.conf.bundle.js --single-run",
+    "test-browser-script": "npm run clean && npm run build:esm && npm run build:browser && npm run test-browser-script:only",
+    "test-browser-script:only": "npx karma start tests/browser/karma.conf.script.js --single-run",
     "docs": "rm -rf ./api-docs && npx typedoc --out api-docs",
-    "prepublishOnly": "npm run build && npm run test:only"
+    "prepublishOnly": "npm ci && npm run build && npm run test:only"
   },
   "dependencies": {
     "content-hash": "^2.3.2",
+    "debug": "^4.1.1",
     "eth-ens-namehash": "^2.0.8",
-    "js-sha3": "^0.8.0"
+    "js-sha3": "^0.8.0",
+    "json-rpc3": "file:../JSON-RPC"
   },
   "devDependencies": {
+    "@industral/tscpaths": "0.0.10",
     "@types/node": "^12.0.4",
     "chai": "^4.2.0",
+    "esm": "^3.2.25",
     "karma": "^4.1.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-mocha": "^1.3.0",
     "karma-webpack": "^3.0.5",
     "mocha": "^6.1.4",
     "node-fetch": "^2.6.0",
-    "node-test": "^1.2.4",
     "typedoc": "^0.14.2",
     "typescript": "^3.5.1",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
-    "whoisens-test-dataset": "^0.1.0"
+    "whoisens-test-dataset": "^0.2.0"
   }
 }

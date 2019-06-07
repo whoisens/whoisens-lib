@@ -1,14 +1,11 @@
 import utils from '../utils/index.js';
-import jsonRCP from '../utils/json-rcp.js';
+import jsonRCP from '../utils/json-rpc.js';
 
 import ENSRoot from './ENSRoot.js';
 import BaseClass from './BaseClass.js';
-import Config from './Config.js';
-import {IResponseResponseInfo, ResolveType} from './types.js';
+import {IResponseResponseInfo, ResolverNotSetError, ResolveType} from './types.js';
 
 export default class Resolver extends BaseClass {
-    private contractAddress: string;
-
     private readonly ltd: string;
     private readonly address: string;
     private readonly addressNode: string;
@@ -21,12 +18,10 @@ export default class Resolver extends BaseClass {
         this.addressNode = utils.node(this.address);
     }
 
-    public async init(): Promise<void> {
-        this.contractAddress = await this.getContractAddress();
-    }
-
     public async getAddress(): Promise<IResponseResponseInfo> {
-        if (!utils.isResult(this.contractAddress)) return {error: 'Resolver is not set'};
+        await this.init();
+
+        if (!utils.isResult(this.contractAddress)) throw new ResolverNotSetError();
 
         const method = 'addr(bytes32)';
         const methodId = utils.getMethodID(method);
@@ -34,8 +29,7 @@ export default class Resolver extends BaseClass {
         const addressNode = utils.remove0x(this.addressNode);
         const data = [methodId, addressNode].join('');
 
-        const result = await jsonRCP.makeRequest({
-            url: Config.getInstance().getCurrentNetworkURL(),
+        const result = await jsonRCP.getInstance().makeRequest({
             to: this.contractAddress,
             data
         });
@@ -49,7 +43,7 @@ export default class Resolver extends BaseClass {
                 addressNode
             },
             jsonRCPResult: result,
-            result: utils.normalizeHex(result.data.result),
+            result: utils.normalizeHex(result.result),
             data: {
                 resolveType: ResolveType.forward
             }
@@ -57,19 +51,20 @@ export default class Resolver extends BaseClass {
     }
 
     public async getContentHash(): Promise<IResponseResponseInfo> {
+        await this.init();
+
         const method = 'contenthash(bytes32)';
         const methodId = utils.getMethodID(method);
 
         const addressNode = utils.remove0x(this.addressNode);
         const data = [methodId, addressNode].join('');
 
-        const result = await jsonRCP.makeRequest({
-            url: Config.getInstance().getCurrentNetworkURL(),
+        const result = await jsonRCP.getInstance().makeRequest({
             to: this.contractAddress,
             data
         });
 
-        const contentHash = utils.decodeContentHash(result.data.result);
+        const contentHash = utils.decodeContentHash(result.result);
 
         return this.returnResult({
             contractAddress: this.contractAddress,
@@ -84,8 +79,12 @@ export default class Resolver extends BaseClass {
         });
     }
 
-    public async getContractAddress(): Promise<string> {
+    public async findContractAddress(): Promise<string> {
         const ensRoot = new ENSRoot();
         return <string>(await ensRoot.getResolver(this.address)).result;
+    }
+
+    private async init(): Promise<void> {
+        this.contractAddress = await this.findContractAddress();
     }
 }

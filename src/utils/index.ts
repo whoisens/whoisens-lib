@@ -65,8 +65,8 @@ export default {
     },
 
     getAddressType(address: string): EthAddressType {
-        if (address.endsWith('.eth') || address === 'eth') return EthAddressType.name;
-        if ((address.startsWith('0x') && !address.endsWith('.addr.reverse')) || (address.endsWith('.addr.reverse') && !address.startsWith('0x'))) return EthAddressType.address;
+        if ((address.endsWith('.eth') && address.length >= 5) || address === 'eth') return EthAddressType.name;
+        if ((address.startsWith('0x') && !address.endsWith('.addr.reverse')) && address.length === 42 && this.trimHex(address) || (address.endsWith('.addr.reverse') && !address.startsWith('0x'))) return EthAddressType.address;
         return EthAddressType.error;
     },
 
@@ -132,7 +132,7 @@ export default {
         return address;
     },
 
-    isResult(str: string): boolean {
-        return str && str !== '0x';
+    isResult(str: string | number): boolean {
+        return str && this.trimHex(str.toString()) && str !== '0x';
     }
 }

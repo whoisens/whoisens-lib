@@ -5,11 +5,11 @@ module.exports = function(config) {
 
   karmaConfig.files.push(
     '../../dist/browser/main.js',
-    './tests/bundle.spec.js'
+    './modules/script.js'
   );
 
   karmaConfig.preprocessors = {
-    './tests/bundle.spec.js': ['webpack']
+    './modules/script.js': ['webpack']
   };
 
   config.set(karmaConfig);

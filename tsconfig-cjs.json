@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "dist/cjs",
+    "paths": {
+      "json-rpc3": ["./node_modules/json-rpc3/dist/cjs/index.js"]
+    }
+  }
+}

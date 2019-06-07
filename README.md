@@ -1,25 +1,11 @@
 # WhoisENS library
 
-<p>
-    <a href="https://www.npmjs.com/package/whoisens-lib">
-        <img src="https://img.shields.io/npm/v/whoisens-lib.svg" alt="npm version">
-    </a>
-    <a href="https://travis-ci.org/whoisens/whoisens-lib">
-        <img src="https://api.travis-ci.org/whoisens/whoisens-lib.svg?branch=master" alt="Build status">
-    </a>
-    <a href="https://david-dm.org/whoisens/whoisens-lib">
-        <img src="https://david-dm.org/whoisens/whoisens-lib/status.svg" alt="dependencies status">
-    </a>
-    <a href="https://david-dm.org/whoisens/whoisens-lib?type=dev">
-        <img src="https://david-dm.org/whoisens/whoisens-lib/dev-status.svg" alt="dependencies status">
-    </a>
-    <a href="https://packagephobia.now.sh/result?p=whoisens-lib">
-        <img src="https://packagephobia.now.sh/badge?p=whoisens-lib" alt="install size">
-    </a>
-    <a href="https://github.com/whoisens/whoisens-lib/blob/master/LICENSE">
-        <img src="https://img.shields.io/npm/l/whoisens-lib.svg" alt="license">
-    </a>
-</p>
+![https://www.npmjs.com/package/whoisens-lib](https://img.shields.io/npm/v/whoisens-lib.svg)
+![https://travis-ci.org/whoisens/whoisens-lib](https://api.travis-ci.org/whoisens/whoisens-lib.svg?branch=master)
+![https://david-dm.org/whoisens/whoisens-lib](https://david-dm.org/whoisens/whoisens-lib/status.svg)
+![https://david-dm.org/whoisens/whoisens-lib?type=dev](https://david-dm.org/whoisens/whoisens-lib/dev-status.svg)
+![https://packagephobia.now.sh/result?p=whoisens-lib](https://packagephobia.now.sh/badge?p=whoisens-lib)
+![https://github.com/whoisens/whoisens-lib/blob/master/LICENSE](https://img.shields.io/npm/l/whoisens-lib.svg)
 
 
 Lightweight library with minimum dependencies to work with [ENS](https://ens.domains/) (Ethereum Name Service).
@@ -145,3 +131,8 @@ npm run build
 ```bash
 npm run test
 ```
+
+
+### Logs
+
+[Debug](https://www.npmjs.com/package/debug) modules is used.

@@ -1,5 +1,11 @@
 import config from '../config.js';
-import {EthAddressType, IResponseResponseInfo} from './types.js';
+import {
+    EthAddressType,
+    IENSParams,
+    InvalidEthNameError,
+    IResponseResponseInfo,
+    NameIsNotRegisteredError
+} from './types.js';
 
 import ENSRoot from './ENSRoot.js';
 import Registrar from './Registrar.js';
@@ -8,6 +14,7 @@ import ReverseResolver from './ReverseResolver.js';
 import utils from '../utils/index.js';
 import BaseClass from './BaseClass.js';
 import Config from './Config.js';
+import debug from 'debug';
 
 export default class ENS extends BaseClass {
     private readonly ENSRoot: ENSRoot;
@@ -39,11 +46,11 @@ export default class ENS extends BaseClass {
      */
     static EVENT_SET_RESPONSE = 'setResponse';
 
-    constructor(networkName: string = config.defaultNetworkName, networkURL: string) {
+    constructor(params: IENSParams = {}) {
         super();
 
-        Config.getInstance().setCurrentNetwork(networkName);
-        Config.getInstance().setCurrentNetworkURL(networkURL);
+        Config.getInstance().currentNetworkURL = params.networkURL || config.networkURL;
+        Config.getInstance().contractAddress = params.contractAddress;
 
         this.ENSRoot = new ENSRoot();
     }
@@ -66,13 +73,13 @@ export default class ENS extends BaseClass {
 
         this.ethAddressType = utils.getAddressType(this.ethAddress);
         this.emit(ENS.EVENT_ETH_ADDRESS_TYPE, this.ethAddressType);
-        if (this.ethAddressType === EthAddressType.error) throw `Invalid address or name. Got: ${this.ethAddress}`;
+        if (this.ethAddressType === EthAddressType.error) throw new InvalidEthNameError(this.ethAddress);
 
         this.ethAddress = utils.reverseAddressToHex(this.ethAddress);
     }
 
     public async getInfo() {
-        if (!this.ethAddress || !this.ethAddressType) throw 'Please call init before';
+        if (!this.ethAddress || !this.ethAddressType) throw new Error('Please call init before');
 
         let controllerResult;
         let ownerResult;
@@ -133,8 +140,7 @@ export default class ENS extends BaseClass {
         const EVENT_PROPERTY = 'ownerResult';
 
         try {
-            this.Registrar = new Registrar(this.ethAddress);
-            await this.Registrar.init();
+            await this.initRegistrar();
 
             const registrarOwnerResult = await this.Registrar.getOwner();
             return this.sendResponse(EVENT_PROPERTY, registrarOwnerResult);
@@ -156,10 +162,7 @@ export default class ENS extends BaseClass {
         const EVENT_PROPERTY = 'expirationDateResult';
 
         try {
-            if (!this.Registrar) {
-                this.Registrar = new Registrar(this.ethAddress);
-                await this.Registrar.init();
-            }
+            await this.initRegistrar();
 
             const nameExpires = await this.Registrar.getExpirationDate();
             return this.sendResponse(EVENT_PROPERTY, nameExpires);
@@ -181,11 +184,14 @@ export default class ENS extends BaseClass {
         const EVENT_PROPERTY = 'addressResult';
 
         try {
-            this.Resolver = new Resolver(this.ethAddress);
-            await this.Resolver.init();
+            if (await this.isNameRegistered()) {
+                await this.initResolver();
 
-            const resolverAddress = await this.Resolver.getAddress();
-            return this.sendResponse(EVENT_PROPERTY, resolverAddress);
+                const resolverAddress = await this.Resolver.getAddress();
+                return this.sendResponse(EVENT_PROPERTY, resolverAddress);
+            } else {
+                this.sendError(EVENT_PROPERTY, new NameIsNotRegisteredError());
+            }
         } catch(error) {
             this.sendError(EVENT_PROPERTY, error);
         }
@@ -204,10 +210,7 @@ export default class ENS extends BaseClass {
         const EVENT_PROPERTY = 'contentHashResult';
 
         try {
-            if (!this.Resolver) {
-                this.Resolver = new Resolver(this.ethAddress);
-                await this.Resolver.init();
-            }
+            await this.initResolver();
 
             const resolverContentHash = await this.Resolver.getContentHash();
             return this.sendResponse(EVENT_PROPERTY, resolverContentHash);
@@ -231,7 +234,6 @@ export default class ENS extends BaseClass {
         try {
             const address = this.resolveAddress || this.ethAddress;
             this.ReverseResolver = new ReverseResolver(address);
-            await this.ReverseResolver.init();
 
             const revertResolverResult = await this.ReverseResolver.getName();
             return this.sendResponse(EVENT_PROPERTY, revertResolverResult);
@@ -245,6 +247,20 @@ export default class ENS extends BaseClass {
         if (this.ethAddressType === EthAddressType.address) return this.getReverseRecord();
     }
 
+    private async initRegistrar() {
+        if (!this.Registrar) this.Registrar = new Registrar(this.ethAddress);
+    }
+
+    private async initResolver() {
+        if (!this.Resolver) this.Resolver = new Resolver(this.ethAddress);
+    }
+
+    private async isNameRegistered() {
+        await this.initRegistrar();
+        const owner = await this.Registrar.getOwner();
+        return utils.isResult(owner.result);
+    }
+
     private sendResponse(resultName: string, result: IResponseResponseInfo): IResponseResponseInfo {
         result = this.extendResultWithAdditionalInfo(result);
 
@@ -256,8 +272,8 @@ export default class ENS extends BaseClass {
         return result;
     }
 
-    private sendError(resultName: string, result: IResponseResponseInfo) {
-        console.error(resultName, result);
+    private sendError(resultName: string, result: any) {
+        debug('error')(`${resultName}: ${result}`);
 
         this.sendResponse(resultName, result);
 
