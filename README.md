@@ -15,7 +15,6 @@ Lightweight library with minimum dependencies to work with [ENS](https://ens.dom
 - get name date expiration
 - resolve name to addresses and address to name
 - get contenthash (IPFS/Swarm)
-- thorough tests
 
 Works with both browser and Node.js.
 
@@ -31,6 +30,7 @@ These names [should be migrated to new ENS registrar by May 4, 2020](https://med
 - content hash returns already decoded
 - lightweight
 - you can include it directly in your browser via `<script>`, for example you can't do it with Web3.js
+- thorough tests
 
 
 ## How it works?
