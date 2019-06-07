@@ -1,4 +1,10 @@
-## [1.0.0] - 2019-06-???
+## [1.0.1] - 2019-06-07
+
+### Added
+- infura network test
+
+
+## [1.0.0] - 2019-06-07
 
 Breaking API changes (constructor parameters).
 

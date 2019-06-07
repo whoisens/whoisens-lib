@@ -14,7 +14,8 @@ Lightweight library with minimum dependencies to work with [ENS](https://ens.dom
 - get owner/controller information
 - get name date expiration
 - resolve name to addresses and address to name
-- get contenthash (IPFS/Swarm) 
+- get contenthash (IPFS/Swarm)
+- thorough tests
 
 Works with both browser and Node.js.
 
@@ -53,13 +54,18 @@ npm i whoisens-lib
 import fetch from 'node-fetch';
 global.fetch = fetch;
 
-const networkName = 'mainnet';
-const networkURL = 'https://eth.gateway.whoisens.org';
-// const networkURL = `https://${networkName}.infura.io/v3/<YOUR_KEY_HERE>`;
+// basic constructor
+const ens = new ENS();
+
+// pass custom networkURL
+const ens = new ENS('https://eth.gateway.whoisens.org');
+
+// pass custom networkURL and eth contractAddress
+const ens = new ENS('https://mainnet.infura.io/v3/<YOUR_KEY>', '0x314159265dd8dbb310642f98f50c066173c1259b');
 
 // get name owner (registrar)
-const ens = new ENS(networkName, networkURL);
-await ens.init('whoisens.eth');
+const ens = new ENS();
+ens.init('whoisens.eth');
 const result = await ens.getOwner();
 
 // get name expiration date

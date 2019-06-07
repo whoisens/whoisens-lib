@@ -18,7 +18,7 @@ module.exports = (moduleTest, NAMES, networkURL, contractAddress) => {
 
       it(`get Eth Name expiration date for: ${name}`, async () => {
         const ens = new ENS({networkURL, contractAddress});
-        await ens.init(name);
+        ens.init(name);
         const result = await ens.getExpirationDate();
 
         expect(result.error).to.be.undefined;
@@ -28,7 +28,7 @@ module.exports = (moduleTest, NAMES, networkURL, contractAddress) => {
 
       it(`get Controller for: ${name}`, async () => {
         const ens = new ENS({networkURL, contractAddress});
-        await ens.init(name);
+        ens.init(name);
         const result = await ens.getController();
 
         expect(result.error).to.be.undefined;
